@@ -1,0 +1,54 @@
+Test  Description                                       Result    Worst error  Seconds
+--------------------------------------------------------------------------------------
+1.1   Covariance, skip missing rows                     PASS         2.22e-16     0.01  
+1.2   Correlation, skip missing rows                    PASS         2.22e-16     0.01  
+1.3   Covariance, pairwise                              PASS         4.44e-16     0.01  
+1.4   Correlation, pairwise                             PASS         2.22e-16     0.01  
+2.1   EW covariance, lambda=0.97                        PASS         2.22e-16     0.01  
+2.2   EW correlation, lambda=0.94                       PASS         4.44e-16     0.00  
+2.3   EW variance (0.97) with EW correlation (0.94)     PASS         3.33e-16     0.00  
+3.1   near_psd covariance                               PASS         1.17e-15     0.01  
+3.2   near_psd correlation                              PASS         1.17e-15     0.00  
+3.3   Higham covariance                                 PASS         1.04e-15     0.01  
+3.4   Higham correlation                                PASS         1.72e-15     0.01  
+4.1   chol_psd                                          PASS         1.46e-16     0.01  
+5.1   Normal simulation, PD input                       PASS         5.11e-03     0.04  (rel. Frobenius)
+5.2   Normal simulation, PSD input                      PASS         3.06e-03     0.02  (rel. Frobenius)
+5.3   Normal simulation, non-PSD, near_psd fix          PASS         4.74e-03     0.02  (rel. Frobenius)
+5.4   Normal simulation, non-PSD, Higham fix            PASS         4.89e-03     0.02  (rel. Frobenius)
+5.5   PCA simulation, 99% explained                     PASS         5.19e-03     0.01  (rel. Frobenius)
+6.1   Arithmetic returns                                PASS         1.00e-16     0.12  
+6.2   Log returns                                       PASS         9.99e-17     0.11  
+7.1   Fit Normal                                        PASS         2.78e-17     0.01  
+7.2   Fit t (mu, sigma, nu)                             PASS         4.66e-08     0.03  
+7.3   Regression with t errors                          PASS         3.51e-07     0.07  
+7.4   AICc of the fitted t                              PASS         1.71e-13     0.03  
+7.5   NIG by method of moments                          PASS         7.82e-14     0.01  
+7.6   NIG by maximum likelihood                         PASS         1.46e-12     0.03  
+8.1   VaR, Normal                                       PASS         2.78e-17     0.01  
+8.2   VaR, t                                            PASS         5.94e-10     0.03  
+8.3   VaR from simulation (compare to 8.2)              PASS         4.04e-02     0.04  (relative)
+8.4   ES, Normal                                        PASS         2.78e-17     0.01  
+8.5   ES, t                                             PASS         1.08e-09     0.08  
+8.6   ES from simulation (compare to 8.5)               PASS         9.54e-03     0.04  (relative)
+9.1   Portfolio VaR/ES, Gaussian copula                 PASS         1.56e-02     0.18  (relative)
+10.1  Risk parity                                       PASS         3.04e-09     0.01  
+10.2  Risk parity, half budget on X5                    PASS         1.63e-10     0.00  
+10.3  Max Sharpe, w >= 0                                PASS         8.86e-08     0.01  
+10.4  Max Sharpe, 0.1 <= w <= 0.5                       PASS         2.00e-08     0.01  
+11.1  Ex-post attribution                               PASS         2.50e-16     0.01  
+11.2  Ex-post attribution to factors                    PASS         1.07e-15     0.01  
+12.1  European options, GBSM + Greeks                   PASS         7.11e-15     0.01  
+12.2  American options, continuous dividend + Greeks    PASS         1.17e-09     0.38  
+12.3  American options, discrete dividends              PASS         5.33e-15     4.56  
+13.1  Correlation from Kendall's tau                    PASS         1.67e-16     0.01  
+13.2  Multivariate t: mean                              PASS         6.51e-17     0.03  
+13.3  Multivariate t: scale matrix                      PASS         7.87e-17     0.02  
+13.4  Multivariate t: nu and log-likelihood             PASS         5.00e-12     0.03  
+13.5  Gaussian copula log-likelihood                    PASS         1.50e-07     0.80  
+13.6  t copula: nu and log-likelihood                   PASS         3.32e-07     0.00  
+13.7  Choose copula by AICc and BIC                     PASS         6.64e-07     0.00  
+13.8  Lower tail dependence, t copula                   PASS         1.67e-16     0.00  
+13.9  Portfolio VaR/ES, t copula                        PASS         1.70e-02     0.66  (relative)
+--------------------------------------------------------------------------------------
+50 of 50 tests passed.   Our outputs are in my_output/

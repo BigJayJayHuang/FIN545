@@ -1,3 +1,12 @@
 .DS_Store
 __pycache__/
 my_output/
+
+# Midterm / exam review files (keep local, not for submission)
+Test Homework/midterm_*.py
+Test Homework/*_BACKUP.py
+Test Homework/qrm_test_solutions_midterm.py
+Test Homework/EXAM_CHEATSHEET.md
+
+# VS Code Code Runner scratch file
+tempCodeRunnerFile.py
