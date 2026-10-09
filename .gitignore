@@ -10,3 +10,10 @@ Test Homework/EXAM_CHEATSHEET.md
 
 # VS Code Code Runner scratch file
 tempCodeRunnerFile.py
+
+# Assignment 2: terminal screenshots and plots are already embedded in the answers PDF (script regenerates the plots)
+Assignments/Assignment2/screenshots/
+Assignments/Assignment2/*.png
+
+# R session history
+.Rhistory

@@ -1,0 +1,290 @@
+
+==============================================================================
+PROBLEM 1 - Correlations from mismatched histories
+==============================================================================
+Days each pair is jointly observed (diagonal = days each series trades):
+       A    B    C   D  IDX
+A    242  242  221  93  242
+B    242  242  221  93  242
+C    221  221  228  83  228
+D     93   93   83  96   96
+IDX  242  242  228  96  250
+
+Days all five series trade (complete rows): 81 of 250
+
+Approx. standard error of each pairwise correlation, (1 - rho^2)/sqrt(n - 1):
+         A      B      C      D    IDX
+A      NaN 0.0503 0.0549 0.0842 0.0157
+B   0.0503    NaN 0.0530 0.0963 0.0298
+C   0.0549 0.0530    NaN 0.1067 0.0326
+D   0.0842 0.0963 0.1067    NaN 0.0650
+IDX 0.0157 0.0298 0.0326 0.0650    NaN
+Complete case uses only 81 rows, so its standard errors are about (1 - rho^2)/sqrt(80) = e.g. 0.094 at rho=0.4
+
+Complete case correlation matrix:
+         A      B      C      D    IDX
+A   1.0000 0.3967 0.2466 0.4136 0.8714
+B   0.3967 1.0000 0.3169 0.2361 0.6709
+C   0.2466 0.3169 1.0000 0.1852 0.5648
+D   0.4136 0.2361 0.1852 1.0000 0.5719
+IDX 0.8714 0.6709 0.5648 0.5719 1.0000
+
+Pairwise correlation matrix:
+         A      B      C      D    IDX
+A   1.0000 0.4686 0.4309 0.4384 0.8696
+B   0.4686 1.0000 0.4630 0.2767 0.7329
+C   0.4309 0.4630 1.0000 0.1846 0.7136
+D   0.4384 0.2767 0.1846 1.0000 0.6057
+IDX 0.8696 0.7329 0.7136 0.6057 1.0000
+
+Eigenvalues, complete case: [0.0015 0.5483 0.6933 0.8704 2.8864]
+Eigenvalues, pairwise     : [-0.0111  0.4714  0.5284  0.8574  3.1539]
+Cholesky of complete case matrix: numpy SUCCEEDED
+            course chol_psd SUCCEEDED, max |L L' - M| = 1.11e-16
+Cholesky of pairwise matrix: numpy FAILED (Matrix is not positive definite)
+            course chol_psd FAILED (matrix is not positive semi-definite)
+
+Full history standard deviations: {'A': 0.016502, 'B': 0.011919, 'C': 0.018324, 'D': 0.022829, 'IDX': 0.012281}
+
+Tracking portfolio variance, pairwise matrix      : -1.7994e-06  (std = -0.00134)
+Tracking portfolio variance, complete case matrix :  1.0975e-06  (std = 0.00105)
+
+Repairs of the pairwise matrix:
+   Rebonato-Jackel: min eigenvalue = -7.515e-17, Frobenius distance from pairwise = 0.01618, tracking variance =  6.8073e-07
+Cholesky of Rebonato-Jackel matrix: numpy FAILED (Matrix is not positive definite)
+            course chol_psd SUCCEEDED, max |L L' - M| = 2.22e-16
+            Higham: min eigenvalue = -1.443e-11, Frobenius distance from pairwise = 0.01552, tracking variance =  6.7876e-07
+Cholesky of Higham matrix: numpy FAILED (Matrix is not positive definite)
+            course chol_psd SUCCEEDED, max |L L' - M| = 2.13e-11
+
+Higham change (repaired - pairwise):
+          A       B       C       D     IDX
+A    0.0000  0.0020  0.0023  0.0018 -0.0070
+B    0.0020  0.0000  0.0014  0.0011 -0.0042
+C    0.0023  0.0014  0.0000  0.0012 -0.0048
+D    0.0018  0.0011  0.0012  0.0000 -0.0037
+IDX -0.0070 -0.0042 -0.0048 -0.0037  0.0000
+Entries ranked by size of Higham change:
+  A-IDX: pairwise= 0.8696  Higham= 0.8625  change=-0.0070  (days observed together: 242)
+  C-IDX: pairwise= 0.7136  Higham= 0.7088  change=-0.0048  (days observed together: 228)
+  B-IDX: pairwise= 0.7329  Higham= 0.7287  change=-0.0042  (days observed together: 242)
+  D-IDX: pairwise= 0.6057  Higham= 0.6020  change=-0.0037  (days observed together: 96)
+  A-C: pairwise= 0.4309  Higham= 0.4332  change= 0.0023  (days observed together: 221)
+
+Rebonato-Jackel change (repaired - pairwise):
+          A       B       C       D     IDX
+A   -0.0000  0.0005  0.0006  0.0004 -0.0075
+B    0.0005  0.0000  0.0004  0.0004 -0.0051
+C    0.0006  0.0004 -0.0000  0.0005 -0.0054
+D    0.0004  0.0004  0.0005  0.0000 -0.0043
+IDX -0.0075 -0.0051 -0.0054 -0.0043 -0.0000
+
+Eigenvector for the smallest eigenvalue of the pairwise matrix (A,B,C,D,IDX): [-0.3943 -0.2336 -0.2669 -0.2086  0.8217]
+
+Frobenius gap between complete case and pairwise : 0.42393
+Frobenius size of Higham repair                  : 0.01552
+Frobenius size of Rebonato-Jackel repair         : 0.01618
+Tracking variance: complete=1.0975e-06, pairwise=-1.7994e-06, Higham=6.7876e-07, R-J=6.8073e-07
+
+Actual variance of the tracking portfolio's return on the 81 complete days (direct, no correlation matrix): 3.2221e-07
+
+Tracking error check on the 81 complete days: std of (IDX - basket) = 0.000568, std of IDX = 0.011603
+  -> fraction of IDX variance not explained by the basket (on complete days): 0.00239
+
+==============================================================================
+PROBLEM 2 - A volatility estimate after the regime changed
+==============================================================================
+500 daily returns, sample mean removed (it was 0.000162)
+
+Regime split used (chosen by eye from the plot): last 30 days vs. the first 470
+
+lambda | n_eff (n=500 weights) | n_eff closed form (1+l)/(1-l) | half life (days) | weight on last 30 days | std error of vol (1/sqrt(2 n_eff))
+  0.94 |                 32.33 |                         32.33 |            11.20 |                0.8437 | 0.1244
+  0.97 |                 65.67 |                         65.67 |            22.76 |                0.5990 | 0.0873
+Equal weight: the last 30 days carry 0.0600 of the weight.
+
+First four moments of the full sample:
+ returns: mean=-0.000000  var=0.00014161  std=0.011900  skew=-0.1556  excess kurt= 2.1324
+Under a normal, the std error of sample skewness is about sqrt(6/n) = 0.110 and of excess kurtosis sqrt(24/n) = 0.219
+  -> skewness is -1.4 standard errors from 0, excess kurtosis is 9.7 standard errors from 0
+
+Daily std: equal weight=0.01191, EW 0.97=0.02105, EW 0.94=0.02353
+Fitted t: location=-0.000000, scale=0.010306, nu=8.3606   (t std = scale*sqrt(nu/(nu-2)) = 0.01182)
+
+5% one day VaR on $1,000,000:
+  1. Normal, equally weighted std    $      19,594
+  2. Normal, EW std lambda=0.97      $      34,619
+  3. Normal, EW std lambda=0.94      $      38,707
+  4. Student t (MLE)                 $      19,057
+  5. Historical simulation           $      20,574
+Ranking, smallest to largest: 4 < 1 < 5 < 2 < 3
+
+Std in old regime (first 470 days): 0.01038   Std in recent regime (last 30 days): 0.02559   ratio = 2.47
+     old: mean= 0.000406  var=0.00010749  std=0.010368  skew=-0.1399  excess kurt=-0.1178
+  recent: mean=-0.006364  var=0.00063317  std=0.025163  skew= 0.5251  excess kurt= 0.1268
+Kurtosis of a 2-regime normal mixture with these stds and weights: 5.565 (excess 2.565); sample excess kurtosis = 2.132
+t with nu=8.36 implies excess kurtosis 6/(nu-4) = 1.376
+VaR if we used each regime's own normal: old=$17,071, recent=$42,097
+
+Relative gap between the two EW vols (0.94 vs 0.97): 0.1181
+  noise (std error / vol) at lambda=0.94: 0.1244
+  noise (std error / vol) at lambda=0.97: 0.0873
+  EW 0.94 vol vs equal weight vol, relative gap: 0.9755
+  Dollar VaR gap 0.94 vs 0.97: $4,088
+
+==============================================================================
+PROBLEM 3 - When diversification raises VaR
+==============================================================================
+10000 scenarios; each bond bought at 90, pays 100 if no default -> no-default return = 0.1111
+
+First four moments of each bond's return:
+       A: mean= 0.083709  var=0.01849080  std=0.135981  skew=-4.8225  excess kurt= 22.0820
+       B: mean= 0.085011  var=0.01744913  std=0.132095  skew=-4.9148  excess kurt= 23.0744
+
+Scenarios where A loses more than 20%: 406 (4.06%)
+Scenarios where B loses more than 20%: 393 (3.93%)
+Scenarios where BOTH lose more than 20%: 17
+Scenarios where AT LEAST ONE loses more than 20%: 782 (7.82%)
+Worst single return: A=-0.8297, B=-0.8560;  scenarios worse than -50%: A=285, B=258
+Share of A scenarios with a gain (return > 0): 0.9594
+Correlation of the two bonds' returns: 0.0022
+
+--- alpha = 5% ---
+Position              Hist VaR       Hist ES    Normal VaR     Normal ES
+$1M in A               -84,531       443,628       139,971       196,794
+$1M in B               -86,011       419,587       132,277       187,477
+$2M in A              -169,061       887,257       279,941       393,589
+$1M A + $1M B          414,767       541,997       143,466       222,774
+
+--- alpha = 1% ---
+Position              Hist VaR       Hist ES    Normal VaR     Normal ES
+$1M in A               650,545       709,548       232,645       278,727
+$1M in B               641,248       700,805       222,303       267,068
+$2M in A             1,301,090     1,419,096       465,291       557,454
+$1M A + $1M B          598,237       716,408       272,811       337,127
+
+Subadditivity check at 5% (historical):
+  VaR: A + B separately = -170,542;  combined = 414,767;  combined - sum = 585,309  -> VIOLATED
+  ES: A + B separately = 863,216;  combined = 541,997;  combined - sum = -321,218  -> SUBADDITIVE
+Subadditivity check at 1% (historical):
+  VaR: A + B separately = 1,291,793;  combined = 598,237;  combined - sum = -693,556  -> SUBADDITIVE
+  ES: A + B separately = 1,410,353;  combined = 716,408;  combined - sum = -693,945  -> SUBADDITIVE
+
+Probability A defaults (loss > 20%) = 0.0406; P(at least one of two defaults) = 0.0782
+5th percentile of A return = 0.0846; 5th percentile of the average of A and B = -0.2073
+
+==============================================================================
+PROBLEM 4 - Gaussian or t copula
+==============================================================================
+First four moments:
+      X1: mean= 0.000257  var=0.00014133  std=0.011888  skew=-0.0342  excess kurt=-0.1225
+      X2: mean=-0.000252  var=0.00026116  std=0.016160  skew=-0.6141  excess kurt= 7.0834
+      X3: mean= 0.000890  var=0.00010028  std=0.010014  skew= 0.0740  excess kurt= 2.8537
+
+Sensitivity: recompute after dropping the single most extreme observation of each series
+  X1: dropped row 951 (value -0.0400, 3.4 std devs out)
+  X1 w/o: mean= 0.000297  var=0.00013985  std=0.011826  skew=-0.0055  excess kurt=-0.1927
+  X2: dropped row 951 (value -0.1429, 8.8 std devs out)
+  X2 w/o: mean=-0.000110  var=0.00024103  std=0.015525  skew= 0.0558  excess kurt= 1.7101
+  X3: dropped row 951 (value -0.0612, 6.2 std devs out)
+  X3 w/o: mean= 0.000952  var=0.00009651  std=0.009824  skew= 0.3127  excess kurt= 1.7161
+
+Joint tail days: both series in their own worst 2.5% / best 2.5%
+Expected under independence over 1000 days: 0.625
+  X1-X2: both worst =  6, both best =  8   (Kendall tau = 0.3964)
+  X1-X3: both worst =  7, both best = 12   (Kendall tau = 0.3354)
+  X2-X3: both worst =  6, both best =  9   (Kendall tau = 0.3074)
+
+Margin fits (AICc, lower is better):
+  X1: Normal AICc=  -6022.54   t AICc=  -6020.52   -> Normal   (t: nu=61111333659251.80, scale=0.01189)
+  X2: Normal AICc=  -5408.49   t AICc=  -5518.18   -> t   (t: nu=5.27, scale=0.01254)
+  X3: Normal AICc=  -6365.69   t AICc=  -6428.02   -> t   (t: nu=6.09, scale=0.00818)
+
+R from Kendall's tau:
+       X1     X2     X3
+X1 1.0000 0.5833 0.5029
+X2 0.5833 1.0000 0.4644
+X3 0.5029 0.4644 1.0000
+Eigenvalues of R: [0.4128 0.5519 2.0353]
+
+                  logL        nu        AICc         BIC
+  Gaussian     350.454       inf    -700.907    -700.907
+         t     451.999     3.658    -901.994    -897.090
+logL difference (t - Gauss) = 101.545;  delta BIC = 2*dlogL - ln(m) = 196.183;  delta AICc (Gauss - t) = 201.086
+
+Profile log likelihood of the t copula at selected nu:
+  nu=  3: logL = 449.224
+  nu=  4: logL = 451.554
+  nu=  5: logL = 447.419
+  nu=  6: logL = 441.975
+  nu=  8: logL = 431.561
+  nu= 10: logL = 422.948
+  nu= 15: logL = 407.731
+  nu= 20: logL = 397.922
+  nu= 30: logL = 385.979
+  nu= 50: logL = 374.235
+
+Portfolio ($1M in each of X1-X3) VaR / ES, 100,000 simulated days:
+                  VaR 5%       ES 5%      VaR 1%       ES 1%
+    Gaussian      49,420      66,393      76,251      93,840
+    t copula      48,882      68,372      79,628     102,806
+  Historical      47,939      65,699      70,092     102,424
+t vs Gauss %       -1.1%        3.0%        4.4%        9.6%
+
+Implied joint tail days per 1000 days (simulated copula uniforms, tail = 2.5%):
+    pair  data lo  data hi  Gauss lo  Gauss hi    t lo    t hi
+   X1-X2        6        8      6.39      6.38    9.62    9.97
+   X1-X3        7       12      4.61      4.68    8.11    8.49
+   X2-X3        6        9      4.55      4.49    7.74    7.92
+
+Total ell_t - ell_Gauss = 101.545
+Days with no series in its outer 5% on either side: 793 of 1000 (79.3%)
+  their contribution: 50.518  (49.7% of the total)
+Days with at least one series in its outer 5%: 207; contribution 51.027 (50.3%)
+Days with 2+ series in an outer 5%: 68; contribution 68.526 (67.5%)
+Largest single day contribution: 10.289; smallest: -1.761; days where t beats Gauss: 579
+
+Most correlated pair: X1-X2 with rho = 0.5833
+  t copula (nu=3.66) lower tail dependence = 0.3220
+  Gaussian copula tail dependence                  = 0 (limit as u->0 is 0 for any rho<1)
+  reference: nu=  4, rho=0.583 -> lambda = 0.3032
+  reference: nu=  6, rho=0.583 -> lambda = 0.2168
+  reference: nu= 10, rho=0.583 -> lambda = 0.1169
+  reference: nu= 20, rho=0.583 -> lambda = 0.0286
+  reference: nu= 50, rho=0.583 -> lambda = 0.0006
+
+==============================================================================
+PROBLEM 5 - Model based simulation and residual correlation
+==============================================================================
+500 daily returns. Means: MKT=0.000764, A=0.000996, B=0.001029 (we assume zero expected returns in the VaR)
+
+Stock A: alpha= 0.000205  beta=1.0353  residual std=0.012901  R^2=0.4181
+Stock B: alpha= 0.000315  beta=0.9354  residual std=0.011550  R^2=0.4226
+Correlation between the residuals: 0.6983
+Market return std: 0.010553
+
+Simulated 5% VaR (100,000 days), zero expected returns:
+                           full residual cov   diag residual cov   diag / full - 1
+     P1 (long A, long B)              50,441              44,637            -11.5%
+    P2 (long A, short B)              15,868              28,640             80.5%
+
+Portfolio standard deviations from the Week 2 formula w' Sigma w  (Sigma = s2M*beta*beta' + Sigma_eps):
+  P1 (long A, long B): full=30,650  diag=27,050  -> normal VaR full=50,415, diag=44,494
+     variance split: market part=432,481,449, residual part (full)=506,935,668, residual part (diag)=299,243,934; cross term lost by the shortcut = 207,691,734
+  P2 (long A, short B): full=9,626  diag=17,331  -> normal VaR full=15,834, diag=28,507
+     variance split: market part=1,110,499, residual part (full)=91,552,200, residual part (diag)=299,243,934; cross term lost by the shortcut = -207,691,734
+
+Sample covariance of (r_A, r_B):
+[[0.0003 0.0002]
+ [0.0002 0.0002]]
+Model implied covariance s2M*beta*beta' + Sigma_eps:
+[[0.0003 0.0002]
+ [0.0002 0.0002]]
+
+Delta normal VaR from the sample covariance (zero mean):
+  P1 (long A, long B): $50,415   | simulated full residual cov VaR: $50,441   | difference: 0.05%
+  P2 (long A, short B): $15,834   | simulated full residual cov VaR: $15,868   | difference: 0.22%
+
+Correlation between the two stock returns: 0.8251
+
+DONE
