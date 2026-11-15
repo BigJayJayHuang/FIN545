@@ -17,3 +17,7 @@ Assignments/Assignment2/*.png
 
 # R session history
 .Rhistory
+
+# Assignment 3: same as Assignment 2, screenshots and plots are embedded in the answers PDF (script regenerates the plots)
+Assignments/Assignment3/screenshots/
+Assignments/Assignment3/*.png

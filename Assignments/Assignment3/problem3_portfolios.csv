@@ -1,0 +1,9 @@
+Portfolio,Type,Strike,DaysToExpiry,ImpliedVol,Holding
+CoveredCall,Stock,,,,100
+CoveredCall,Call,105.0,30,0.27,-100
+ShortStraddle,Call,100.0,30,0.29,-100
+ShortStraddle,Put,100.0,30,0.29,-100
+RiskReversal,Call,105.0,30,0.27,100
+RiskReversal,Put,95.0,30,0.32,-100
+HedgedShortCall,Call,100.0,30,0.29,-100
+HedgedShortCall,Stock,,,,50

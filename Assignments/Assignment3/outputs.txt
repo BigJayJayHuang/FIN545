@@ -1,0 +1,432 @@
+
+==============================================================================
+PROBLEM 1 - Implied volatility from a dirty chain
+==============================================================================
+S = 182.4, r = 0.0425, q = 0.006, days = 35, T = 0.095890
+
+--- 1(a) put call parity at every strike, using mids ---
+           C mid   P mid  S e^-qT - K e^-rT     gap   band      flag
+Strike                                                              
+140.0000 42.9500  0.0900            42.8645 -0.0045 1.4000          
+145.0000 38.0150  0.1300            37.8848  0.0002 1.2500          
+150.0000 33.1000  0.2000            32.9051 -0.0051 1.1000          
+155.0000 28.2450  0.3200            27.9255 -0.0005 0.9500          
+160.0000 23.4800  0.5350            22.9458 -0.0008 0.8300          
+165.0000 18.8750  0.9100            17.9662 -0.0012 0.6900          
+170.0000 14.5350  1.5500            12.9865 -0.0015 0.5900          
+175.0000 10.6050  1.7100             8.0068  0.8882 0.4700  <-- FLAG
+180.0000  7.2300  4.2050             3.0272 -0.0022 0.4300          
+185.0000  4.5550  6.5050            -1.9525  0.0025 0.4400          
+190.0000  2.6200  9.5500            -6.9322  0.0022 0.4600          
+195.0000  1.3650 13.2800           -11.9118 -0.0032 0.5300          
+200.0000  0.6450 17.5400           -16.8915 -0.0035 0.6500          
+205.0000  0.2800 22.1500           -21.8712  0.0012 0.7800          
+210.0000  0.1100 26.9600           -26.8508  0.0008 0.9200          
+215.0000  0.0750 31.8700           -31.8305  0.0355 1.0500          
+220.0000  0.0750 36.8250           -36.8102  0.0602 1.2000          
+225.0000  0.0750 41.7950           -41.7898  0.0698 1.3600          
+Flagged strikes: [175.0]
+
+--- 1(c) where the wings are (look before predicting) ---
+Cheapest quotes (mid <= 0.20), these are the far wings:
+Type   Strike    Bid    Ask    Mid  Spread
+Call 210.0000 0.0800 0.1400 0.1100  0.0600
+Call 215.0000 0.0500 0.1000 0.0750  0.0500
+Call 220.0000 0.0500 0.1000 0.0750  0.0500
+Call 225.0000 0.0500 0.1000 0.0750  0.0500
+ Put 140.0000 0.0600 0.1200 0.0900  0.0600
+ Put 145.0000 0.1000 0.1600 0.1300  0.0600
+ Put 150.0000 0.1700 0.2300 0.2000  0.0600
+
+--- 1(d) implied vol from mid, bid, and ask ---
+Type   Strike  IV Bid                                    note  IV Mid  IV Ask
+Call 140.0000     NaN Bid: price 42.280 <= lower bound 42.864  0.3880  0.5647
+Call 145.0000     NaN Bid: price 37.420 <= lower bound 37.885  0.3643  0.4997
+Call 150.0000     NaN Bid: price 32.580 <= lower bound 32.905  0.3395  0.4395
+Call 155.0000     NaN Bid: price 27.800 <= lower bound 27.925  0.3198  0.3880
+Call 160.0000  0.2344                                          0.3017  0.3462
+Call 165.0000  0.2550                                          0.2858  0.3126
+Call 170.0000  0.2550                                          0.2720  0.2883
+Call 175.0000  0.2506                                          0.2605  0.2702
+Call 180.0000  0.2442                                          0.2502  0.2562
+Call 185.0000  0.2377                                          0.2419  0.2462
+Call 190.0000  0.2321                                          0.2350  0.2380
+Call 195.0000  0.2266                                          0.2295  0.2323
+Call 200.0000  0.2220                                          0.2254  0.2286
+Call 205.0000  0.2179                                          0.2229  0.2276
+Call 210.0000  0.2103                                          0.2207  0.2294
+Call 215.0000  0.2256                                          0.2382  0.2483
+Call 220.0000  0.2531                                          0.2669  0.2778
+Call 225.0000  0.2796                                          0.2945  0.3062
+ Put 140.0000  0.3704                                          0.3907  0.4068
+ Put 145.0000  0.3505                                          0.3642  0.3761
+ Put 150.0000  0.3319                                          0.3410  0.3494
+ Put 155.0000  0.3138                                          0.3199  0.3257
+ Put 160.0000  0.2971                                          0.3018  0.3065
+ Put 165.0000  0.2822                                          0.2859  0.2896
+ Put 170.0000  0.2687                                          0.2722  0.2755
+ Put 175.0000  0.2087                                          0.2116  0.2145
+ Put 180.0000  0.2464                                          0.2503  0.2542
+ Put 185.0000  0.2362                                          0.2418  0.2474
+ Put 190.0000  0.2264                                          0.2349  0.2434
+ Put 195.0000  0.2152                                          0.2297  0.2434
+ Put 200.0000  0.1945                                          0.2257  0.2511
+ Put 205.0000     NaN Bid: price 21.790 <= lower bound 21.871  0.2227  0.2686
+ Put 210.0000     NaN Bid: price 26.530 <= lower bound 26.851  0.2204  0.2978
+ Put 215.0000     NaN Bid: price 31.370 <= lower bound 31.830  0.2190  0.3359
+ Put 220.0000     NaN Bid: price 36.250 <= lower bound 36.810  0.2206  0.3792
+ Put 225.0000     NaN Bid: price 41.140 <= lower bound 41.790  0.2217  0.4244
+Saved problem1_smile.png
+
+--- 1(e) vega and the vol change from a 1 cent price change ---
+          Call vega  Call dIV per 1c (vol pts)  Put vega  Put dIV per 1c (vol pts)
+Strike                                                                            
+140.0000     1.6318                     0.6128    1.6886                    0.5922
+145.0000     2.3732                     0.4214    2.3710                    0.4218
+150.0000     3.3902                     0.2950    3.4441                    0.2904
+155.0000     5.0566                     0.1978    5.0609                    0.1976
+160.0000     7.4599                     0.1340    7.4655                    0.1339
+165.0000    10.7449                     0.0931   10.7504                    0.0930
+170.0000    14.7579                     0.0678   14.7621                    0.0677
+175.0000    18.8417                     0.0531   17.4008                    0.0575
+180.0000    21.8006                     0.0459   21.8009                    0.0459
+185.0000    22.3970                     0.0446   22.3968                    0.0446
+190.0000    20.1044                     0.0497   20.1020                    0.0497
+195.0000    15.6218                     0.0640   15.6327                    0.0640
+200.0000    10.5050                     0.0952   10.5300                    0.0950
+205.0000     6.1876                     0.1616    6.1734                    0.1620
+210.0000     3.1927                     0.3132    3.1774                    0.3147
+215.0000     2.2580                     0.4429    1.4603                    0.6848
+220.0000     2.0733                     0.4823    0.6582                    1.5193
+225.0000     1.9250                     0.5195    0.2716                    3.6815
+
+--- 1(f) flagged strike: parity gap in vol points vs the call-put IV gap ---
+K=175.0: parity gap +0.8882, band 0.47. gap / vega = +5.10 vol points
+        call IV 0.2605, put IV 0.2116, call - put = +4.88 vol points
+        neighbour average put IV 0.2612 -> put worth 2.613 vs quoted mid 1.710
+
+--- 1(g) the call wing above 210 ---
+          C bid  C ask  IV bid  IV mid  IV ask  put IV mid  dIV/1c
+Strike                                                            
+195.0000 1.3200 1.4100  0.2266  0.2295  0.2323      0.2297  0.0640
+200.0000 0.6100 0.6800  0.2220  0.2254  0.2286      0.2257  0.0952
+205.0000 0.2500 0.3100  0.2179  0.2229  0.2276      0.2227  0.1616
+210.0000 0.0800 0.1400  0.2103  0.2207  0.2294      0.2204  0.3132
+215.0000 0.0500 0.1000  0.2256  0.2382  0.2483      0.2190  0.4429
+220.0000 0.0500 0.1000  0.2531  0.2669  0.2778      0.2206  0.4823
+225.0000 0.0500 0.1000  0.2796  0.2945  0.3062      0.2217  0.5195
+Call 215.0: value at the put's IV = 0.0395  (quoted 0.05 / 0.10)
+Call 220.0: value at the put's IV = 0.0148  (quoted 0.05 / 0.10)
+Call 225.0: value at the put's IV = 0.0052  (quoted 0.05 / 0.10)
+
+--- 1(h) the smile without the two problems ---
+  Strike  moneyness K/S  put IV  call IV  OTM IV
+140.0000         0.7675  0.3907   0.3880  0.3907
+145.0000         0.7950  0.3642   0.3643  0.3642
+150.0000         0.8224  0.3410   0.3395  0.3410
+155.0000         0.8498  0.3199   0.3198  0.3199
+160.0000         0.8772  0.3018   0.3017  0.3018
+165.0000         0.9046  0.2859   0.2858  0.2859
+170.0000         0.9320  0.2722   0.2720  0.2722
+180.0000         0.9868  0.2503   0.2502  0.2503
+185.0000         1.0143  0.2418   0.2419  0.2419
+190.0000         1.0417  0.2349   0.2350  0.2350
+195.0000         1.0691  0.2297   0.2295  0.2295
+200.0000         1.0965  0.2257   0.2254  0.2254
+205.0000         1.1239  0.2227   0.2229  0.2229
+210.0000         1.1513  0.2204   0.2207  0.2207
+ATM-ish IV (K=180.0) = 0.2503; 140 put IV = 0.3907; 210 call IV = 0.2207
+
+==============================================================================
+PROBLEM 2 - American options and discrete dividends
+==============================================================================
+
+--- 2(a) early exercise condition D > X (1 - e^{-r(T - t)}) ---
+Dividend 0.25 at t=0.1: X(1 - e^(-r(T-t))) = 0.8919 -> never optimal to exercise before it
+Dividend 1.50 at t=0.4: X(1 - e^(-r(T-t))) = 0.2245 -> early exercise CAN be optimal just before it
+
+--- 2(c) prices with and without dividends (trees use N=500) ---
+PV of dividends = 1.7221, so GBSM uses S = 46.7779
+(No dividend column: GBSM for the Europeans, tree for the Americans)
+           No dividends  With dividends (tree)  GBSM, S - PV(div)  Change from dividends
+Euro call        3.9223                 3.1763             3.0723                -0.7460
+Amer call        3.9241                 3.4695                NaN                -0.4546
+Euro put         4.3098                 5.2860             5.1820                 0.9761
+Amer put         4.4394                 5.3714                NaN                 0.9320
+Check: European tree with no dividends (N=500) call 3.9241, put 4.3116 vs GBSM above
+
+--- 2(d) convergence of the American values as N grows ---
+     Amer call (div)  Amer put (div)
+N                                   
+20            3.4778          5.4022
+25            3.4723          5.3962
+50            3.4715          5.3680
+55            3.4842          5.3845
+100           3.4726          5.3793
+105           3.4651          5.3682
+200           3.4675          5.3711
+205           3.4672          5.3728
+300           3.4700          5.3721
+305           3.4697          5.3707
+500           3.4695          5.3714
+505           3.4677          5.3695
+Saved problem2_convergence.png
+
+--- 2(e) delta and gamma by central differences on the tree (N=200) ---
+Option   bump h     delta     gamma
+  Call 1.000000  0.504181  0.045907
+  Call 0.100000  0.500283  0.078617
+  Call 0.010000  0.504176  0.004575
+  Call 0.001000  0.504187 -0.000000
+   Put 1.000000 -0.544792  0.041350
+   Put 0.100000 -0.561180  0.021055
+   Put 0.010000 -0.561678  0.017833
+   Put 0.001000 -0.561684  0.022390
+Reference: European call GBSM gamma at S - PV(div): 0.039995
+American call value on a fine grid of S (step 0.01), and the slope between points:
+  S     :    48.45    48.46    48.47    48.48    48.49    48.50    48.51    48.52    48.53    48.54    48.55
+  value :  3.44239  3.44740  3.45243  3.45746  3.46250  3.46754  3.47259  3.47763  3.48267  3.48771  3.49275
+  slope :           0.50087  0.50280  0.50366  0.50402  0.50415  0.50420  0.50421  0.50422  0.50422  0.50422
+
+--- 2(f) sensitivity to each dividend amount (central difference, bump 0.01) ---
+Option           Dividend  European dV/dD  American dV/dD
+  Call D1 (0.25 at t=0.1)         -0.4259         -0.4838
+  Call  D2 (1.5 at t=0.4)         -0.3717         -0.0842
+   Put D1 (0.25 at t=0.1)          0.5696          0.5760
+   Put  D2 (1.5 at t=0.4)          0.6105          0.6172
+For reference e^(-r t) for D1 = 0.9955
+For reference e^(-r t) for D2 = 0.9822
+
+--- 2(g) early exercise premium and the critical stock price before the 2nd dividend ---
+Early exercise premium = American - European (GBSM without dividends, tree with them)
+      No dividends  With dividends
+Call        0.0018          0.2932
+Put         0.1296          0.0854
+Critical cum dividend stock price at t=0.4: S* = 52.7168  (exercise value 2.7168 = hold value 2.7168)
+Rough risk neutral chance S(0.4) > S*: 0.320
+
+--- 2(i) per dollar effect of each dividend on the call (from 2f) ---
+                   Option  European dV/dD  American dV/dD
+Dividend                                                 
+D1 (0.25 at t=0.1)   Call         -0.4259         -0.4838
+D2 (1.5 at t=0.4)    Call         -0.3717         -0.0842
+Ratio D1 effect / D2 effect, American call: 5.75
+
+==============================================================================
+PROBLEM 3 - VaR of an option book
+==============================================================================
+Last price S = 99.12, 500 daily returns, r = 0.0425, horizon = 10 trading days
+
+--- 3(a) value and Greeks of each book ---
+                     value   delta   gamma   theta_yr  theta_10d  dollar_delta
+CoveredCall     9,744.7806 69.9161 -3.7925 1,477.7764    57.9520    6,930.0792
+ShortStraddle    -788.4394 -0.8888 -8.0921 3,313.3549   129.9355      -88.1022
+RiskReversal      -65.7930 61.3887  0.5360    18.5884     0.7290    6,084.8509
+HedgedShortCall 4,580.8427 -0.4444 -4.0461 1,868.1176    73.2595      -44.0511
+Daily return std 0.016674, 10 day 1-sd move in ABC = $5.226
+Size of the gamma term 0.5*Gamma*(1sd move)^2 vs the delta term |delta|*(1sd move):
+       CoveredCall: delta term    365.41   gamma term    -51.80   theta 10d   +57.95
+     ShortStraddle: delta term      4.65   gamma term   -110.52   theta 10d  +129.94
+      RiskReversal: delta term    320.85   gamma term     +7.32   theta 10d    +0.73
+   HedgedShortCall: delta term      2.32   gamma term    -55.26   theta 10d   +73.26
+
+--- 3(c) moments of ABC returns, normal vs t by AICc ---
+     ABC: mean= 0.000321  std=0.016658  skew= 0.0191  excess kurt= 2.4274
+Normal: mu=0.000321 sigma=0.016674  LL=1337.975  AICc=-2671.925
+t     : mu=0.000001 scale=0.013506 nu=5.7893  LL=1353.199  AICc=-2700.349
+AICc picks: t
+
+--- 3(d) 10 day delta normal VaR and ES (zero mean) ---
+                  VaR 5%    ES 5%   VaR 1%    ES 1%
+CoveredCall     601.0528 753.7445 850.0805 973.9071
+ShortStraddle     7.6412   9.5824  10.8071  12.3813
+RiskReversal    527.7453 661.8139 746.4003 855.1243
+HedgedShortCall   3.8206   4.7912   5.4035   6.1906
+
+--- 3(e) full revaluation Monte Carlo, 10 days, 100,000 paths per distribution ---
+           Book   Dist  Mean P&L   VaR 5%    ES 5%     VaR 1%      ES 1%  ES/VaR 5%
+    CoveredCall Normal    6.1126 681.3067 875.0319   997.9888 1,147.7882     1.2843
+    CoveredCall      t    6.0677 683.6703 902.1604 1,035.8949 1,229.5902     1.3196
+  ShortStraddle Normal   19.1405 317.7424 482.3303   585.9331   734.1777     1.5180
+  ShortStraddle      t   20.0697 322.4031 519.3135   636.5109   841.7004     1.6108
+   RiskReversal Normal    8.5789 492.4523 642.0486   736.1151   863.8429     1.3038
+   RiskReversal      t    7.8287 494.1609 664.9497   767.2794   936.3098     1.3456
+HedgedShortCall Normal   17.8690 150.5725 232.8665   284.6679   358.7902     1.5465
+HedgedShortCall      t   18.3336 152.9029 251.3581   309.9568   412.5515     1.6439
+Zero move P&L over 10 days (S unchanged, 10 days of decay):
+       CoveredCall: +60.55
+     ShortStraddle: +143.06
+      RiskReversal: +3.73
+   HedgedShortCall: +79.83
+
+--- 3(f) plot of 10 day P&L vs price, with delta only line ---
+Saved problem3_pnl.png
+
+--- 3(g) does the 2nd order (delta-gamma-theta) expansion reproduce full revaluation? ---
+Same normal paths as 3(e):
+           Book  VaR5 d-g-t  VaR5 full  ES1 d-g-t   ES1 full  mean d-g-t  mean full
+    CoveredCall    663.3050   681.3067 1,191.3001 1,147.7882      6.0498     6.1126
+  ShortStraddle    297.1632   317.7424   809.5823   734.1777     18.9666    19.1405
+   RiskReversal    496.1182   492.4523   759.0464   863.8429      8.1705     8.5789
+HedgedShortCall    140.2898   150.5725   396.4994   358.7902     17.7751    17.8690
+
+--- 3(i) normal to t: % change in each number ---
+Percent change going from normal to t:
+                 VaR 5%  ES 5%  VaR 1%  ES 1%
+Book                                         
+CoveredCall       +0.3%  +3.1%   +3.8%  +7.1%
+ShortStraddle     +1.5%  +7.7%   +8.6% +14.6%
+RiskReversal      +0.3%  +3.6%   +4.2%  +8.4%
+HedgedShortCall   +1.5%  +7.9%   +8.9% +15.0%
+10 day return quantile at 0.05: normal -0.0848, t -0.0850
+10 day return quantile at 0.01: normal -0.1173, t -0.1212
+10 day return quantile at 0.001: normal -0.1513, t -0.1635
+
+==============================================================================
+PROBLEM 4 - A Sharpe ratio that sells insurance
+==============================================================================
+
+--- 4(a) moments and annualized Sharpe ratios ---
+      EQ: mean= 0.007901  std=0.049164  skew=-0.3849  excess kurt= 3.4212
+    BOND: mean= 0.003327  std=0.013432  skew= 0.0867  excess kurt= 0.4816
+     STK: mean= 0.011244  std=0.093072  skew=-0.0606  excess kurt= 0.7703
+    PUTW: mean= 0.006243  std=0.016516  skew=-6.5254  excess kurt= 59.8505
+Annualized Sharpe = mean monthly excess / monthly std * sqrt(12):
+     EQ: 0.3798
+   BOND: 0.2128
+    STK: 0.3248
+   PUTW: 0.7834
+Effect of the single worst month on each asset:
+     EQ: worst month 2008-06-30 return -0.2351; Sharpe without it 0.4753; skew without it +0.073, excess kurt without it 1.852
+   BOND: worst month 2015-07-31 return -0.0306; Sharpe without it 0.2521; skew without it +0.128, excess kurt without it 0.476
+    STK: worst month 2008-06-30 return -0.3767; Sharpe without it 0.3990; skew without it +0.215, excess kurt without it -0.108
+   PUTW: worst month 2008-06-30 return -0.1672; Sharpe without it 1.2717; skew without it -4.472, excess kurt without it 39.872
+PUTW: 12 losing months of 240, most common return 0.006385 (193 months)
+Correlation matrix:
+          EQ    BOND     STK    PUTW
+EQ    1.0000 -0.1181  0.7091  0.5500
+BOND -0.1181  1.0000 -0.0433 -0.0094
+STK   0.7091 -0.0433  1.0000  0.3659
+PUTW  0.5500 -0.0094  0.3659  1.0000
+
+--- 4(c) max Sharpe portfolios: unconstrained, long only, long only with PUTW <= 20% ---
+                          EQ   BOND    STK   PUTW
+Unconstrained        -0.0439 0.2465 0.0227 0.7747
+Long only             0.0000 0.2607 0.0092 0.7301
+Long only, PUTW<=20%  0.1463 0.6362 0.0175 0.2000
+Saved problem4_frontier.png
+
+--- 4(d) Sharpe, historical and normal VaR / ES of each portfolio (monthly, % of value) ---
+Portfolio    Unconstrained  Long only  Long only, PUTW<=20%
+Sharpe              0.8198     0.8153                0.5902
+Hist VaR 5%         0.0037     0.0029                0.0156
+Norm VaR 5%         0.0157     0.0156                0.0167
+Hist ES 5%          0.0290     0.0293                0.0284
+Norm ES 5%          0.0211     0.0210                0.0221
+Hist VaR 1%         0.0591     0.0600                0.0393
+Norm VaR 1%         0.0246     0.0244                0.0256
+Hist ES 1%          0.1033     0.1026                0.0597
+Norm ES 1%          0.0290     0.0288                0.0300
+skew               -5.7642    -5.7147               -0.9617
+xs kurt            52.0652    50.6857                5.7662
+
+--- 4(e) CAPM regression of PUTW excess on EQ excess ---
+All 240 months: alpha 0.002745/month (3.2938%/yr), t = 3.052; beta 0.1848 (se 0.0182); R^2 0.3026
+EQ excess < -5% (26 months): beta 0.9428 (se 0.0432), alpha 0.05865, R^2 0.9521
+All other months (214): beta 0.0430 (se 0.0110), R^2 0.0675
+PUTW mean excess in the 26 down months: -0.0154; in the rest: +0.0061
+
+--- 4(h) standard error of each mean, and bootstrapped long only tangency weights ---
+      mean/month  SE of mean  t = mean/SE  95% CI low (ann)  95% CI high (ann)
+EQ        0.0079      0.0032       2.4846            0.0200             0.1696
+BOND      0.0033      0.0009       3.8289            0.0195             0.0604
+STK       0.0112      0.0060       1.8677           -0.0067             0.2765
+PUTW      0.0062      0.0011       5.8435            0.0498             0.1000
+1000 bootstrap resamples of the 240 months, long only max Sharpe each time:
+      point est  boot mean  boot std  5th pct  95th pct  % of draws = 0
+EQ       0.0000     0.0211    0.0770   0.0000    0.1129         76.4000
+BOND     0.2607     0.2579    0.2197   0.0000    0.6886         15.7000
+STK      0.0092     0.0206    0.0449   0.0000    0.0897         47.7000
+PUTW     0.7301     0.7004    0.2426   0.2111    1.0000          1.5000
+
+==============================================================================
+PROBLEM 5 - Alpha or factor exposure?
+==============================================================================
+Funds: 1996-10-01 to 2001-09-28, 1257 days; matched to factors: 1257 days
+
+--- 5(a) mean excess return, vol, Sharpe, CAPM ---
+FUND1: mean excess 15.9030%/yr, vol 18.7568%/yr, Sharpe 0.8479
+FUND2: mean excess 8.6076%/yr, vol 11.4761%/yr, Sharpe 0.7500
+FUND1 CAPM: alpha 11.2368%/yr (t 3.204), beta 0.8469, R^2 0.8279
+FUND2 CAPM: alpha 6.2451%/yr (t 1.835), beta 0.4288, R^2 0.5669
+
+--- 5(b) correlation of each CAPM residual with SMB, HML, Mom ---
+FUND1: SMB -0.0612  HML +0.2052  Mom +0.8015
+FUND2: SMB +0.3295  HML -0.1206  Mom +0.0530
+
+--- 5(c) CAPM, FF3, Carhart for each fund ---
+
+FUND1 - CAPM:  R^2 0.8279   AICc -9812.42   alpha 11.2368%/yr  (alpha t 3.204)
+           coef  std err         t
+alpha  0.000441 0.000138  3.204331
+Mkt-RF 0.846890 0.010900 77.696245
+
+FUND1 - FF3:  R^2 0.8452   AICc -9941.70   alpha 7.5559%/yr  (alpha t 2.260)
+           coef  std err         t
+alpha  0.000296 0.000131  2.260353
+Mkt-RF 1.001727 0.017162 58.368824
+SMB    0.082782 0.020500  4.038191
+HML    0.334614 0.028812 11.613667
+
+FUND1 - Carhart:  R^2 0.9563   AICc -11530.41   alpha 0.0749%/yr  (alpha t 0.042)
+           coef  std err          t
+alpha  0.000003 0.000070   0.042063
+Mkt-RF 0.949160 0.009166 103.548250
+SMB    0.000835 0.010989   0.075961
+HML    0.290728 0.015329  18.966080
+Mom    0.393551 0.006972  56.445917
+
+FUND2 - CAPM:  R^2 0.5669   AICc -9887.50   alpha 6.2451%/yr  (alpha t 1.835)
+           coef  std err         t
+alpha  0.000245 0.000133  1.834873
+Mkt-RF 0.428770 0.010579 40.529262
+
+FUND2 - FF3:  R^2 0.6148   AICc -10030.94   alpha 7.0672%/yr  (alpha t 2.191)
+            coef  std err         t
+alpha   0.000277 0.000127  2.190566
+Mkt-RF  0.444303 0.016564 26.824196
+SMB     0.210010 0.019785 10.614687
+HML    -0.003800 0.027807 -0.136659
+
+FUND2 - Carhart:  R^2 0.6149   AICc -10029.13   alpha 6.9563%/yr  (alpha t 2.150)
+            coef  std err         t
+alpha   0.000273 0.000127  2.149537
+Mkt-RF  0.443524 0.016655 26.630211
+SMB     0.208796 0.019966 10.457488
+HML    -0.004451 0.027852 -0.159800
+Mom     0.005834 0.012668  0.460546
+
+--- 5(d) expected annual return from the 4 factor betas, last 10 years of factor data ---
+Factor window: 2014-10-01 to 2024-09-30 (2516 days)
+Average annual factor returns (x255): Mkt-RF 12.4946%, SMB -1.1889%, HML -2.3929%, RF 1.5731%, Mom 2.4628%
+FUND1: RF 1.5731% + factor premia 12.1319% = 13.7050% without alpha; 13.7799% with alpha (+0.0749%)
+FUND2: RF 1.5731% + factor premia 5.3184% = 6.8915% without alpha; 13.8478% with alpha (+6.9563%)
+
+--- 5(e) worst daily momentum return repeated on $10M ---
+Worst Mom day in the file: 1939-09-05, -18.4400%
+FUND1: Mom beta +0.3936 -> P&L -725,709 on $10M = 6.18 daily std devs (daily std 1.1745%, so 1 sd = $117,454)
+FUND2: Mom beta +0.0058 -> P&L -10,758 on $10M = 0.15 daily std devs (daily std 0.7186%, so 1 sd = $71,860)
+
+--- 5(f) factor premia during the fund sample and how they explain FUND1's alpha change ---
+Average annual factor returns during the fund sample: Mkt-RF 5.5098%, SMB -4.1506%, HML 9.4778%, Mom 19.9375%, RF 4.9971%
+FUND1: CAPM alpha +11.2368% -> Carhart alpha +0.0749% (change -11.1619%)
+   piece of return from each added factor (beta x sample premium): SMB -0.0035%, HML +2.7555%, Mom +7.8464%, market beta change +0.5635%; total +11.1619%
+FUND2: CAPM alpha +6.2451% -> Carhart alpha +6.9563% (change +0.7112%)
+   piece of return from each added factor (beta x sample premium): SMB -0.8666%, HML -0.0422%, Mom +0.1163%, market beta change +0.0813%; total -0.7112%
+
+--- 5(h) expected return from 5(d) vs realized in the sample ---
+FUND1: realized mean return in sample 20.9001%/yr; factor model, recent 10 yrs, no alpha 13.7050%; same betas with the sample's own factor means 20.8252%
+FUND2: realized mean return in sample 13.6047%/yr; factor model, recent 10 yrs, no alpha 6.8915%; same betas with the sample's own factor means 6.6484%
+SE of a factor's annual mean over 10 years (std*sqrt(255)/sqrt(10)): Mkt-RF 5.82%, SMB 3.32%, HML 4.51%, Mom 5.55%
+
+Done.
